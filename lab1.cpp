@@ -72,7 +72,9 @@ struct Game {
 	particle = new Particle[MAX_PARTICLES];
 	n=0;
 	//do the circle here.
-	
+	circle.radius=150.0;
+	circle.center.x=500;
+	circle.center.y=0;	
 	//declare a box shape
 	for(int i=0;i<5;i++)
 	{
@@ -279,6 +281,14 @@ void movement(Game *game)
 		//p->s.cneter.y > 
 	    }
 	}
+	float d0,d1,dist;
+	d0=p->s.center.x - game->circle.center.x;
+	d1=p->s.center.y-game->circle.center.y;
+	dist=sqrt(d0*d0+d1*d1);
+	if(dist<game->circle.radius){
+	    p->velocity.x += d0 * .1;
+	    p->velocity.y =+ d1*.1;
+	}
 
 
 
@@ -295,8 +305,31 @@ void movement(Game *game)
 void render(Game *game)
 {
     float w, h;
+    const int n=40;
+    static int firstTime=1;
+    static Vec vert[n];
     glClear(GL_COLOR_BUFFER_BIT);
     //Draw shapes...
+    if(firstTime)
+    {
+	double ang=0.0,inc=3.1459*2/(float)n;
+	for(int i=0;i<n;i++)
+	{
+	    vert[i].x=cos(ang) * game->circle.radius;
+	    vert[i].y=sin(ang) * game->circle.radius;
+	    ang +=inc;
+	}
+	firstTime=0;
+    }
+    //glColor3ub(255,255,255);
+    glColor3ub(90,140,90);
+    glBegin(GL_LINE_LOOP);
+    for(int i=0;i<n;i++)
+    {
+	glVertex2f(game->circle.center.x+vert[i].x,game->circle.center.y + vert[i].y);
+    }
+    glEnd();
+	
 
     //draw box
     Shape *s;
