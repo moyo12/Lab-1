@@ -286,8 +286,8 @@ void movement(Game *game)
 	d1=p->s.center.y-game->circle.center.y;
 	dist=sqrt(d0*d0+d1*d1);
 	if(dist<game->circle.radius){
-	    p->velocity.x += d0 * .1;
-	    p->velocity.y =+ d1*.1;
+	    p->velocity.x += d0 * .01;
+	    p->velocity.y =+ d1*.001;
 	}
 
 
