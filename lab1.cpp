@@ -377,8 +377,8 @@ void render(Game *game)
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D,0);
 
-    r.bot=580;
-    r.left=10;
+    r.bot=490;
+    r.left=50;
     r.center=0;
     unsigned int cref=0x00ffffff;
     ggprint8b(&r,16,cref,"Requirements");
