@@ -34,6 +34,9 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <GL/glx.h>
+extern "C"{
+    #include "fonts.h"
+}
 
 #define WINDOW_WIDTH  800
 #define WINDOW_HEIGHT 600
@@ -47,6 +50,7 @@ Window win;
 GLXContext glc;
 
 //Structures
+
 
 struct Vec {
     float x, y, z;
@@ -185,6 +189,9 @@ void init_opengl(void)
     glOrtho(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT, -1, 1);
     //Set the screen background color
     glClearColor(0.1, 0.1, 0.1, 1.0);
+    //To print out text to the screen.
+    glEnable(GL_TEXTURE_2D);
+    initialize_fonts();
 }
 
 #define rnd() (float)rand() / (float)RAND_MAX
@@ -305,6 +312,7 @@ void movement(Game *game)
 void render(Game *game)
 {
     float w, h;
+    Rect r;
     const int n=40;
     static int firstTime=1;
     static Vec vert[n];
@@ -366,6 +374,14 @@ void render(Game *game)
 	glEnd();
     }
     glPopMatrix();
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D,0);
+
+    r.bot=580;
+    r.left=10;
+    r.center=0;
+    unsigned int cref=0x00ffffff;
+    ggprint8b(&r,16,cref,"Requirements");
 }
 
 
