@@ -366,7 +366,7 @@ void render(Game *game)
 	glVertex2i( w, h);
 	glVertex2i( w,-h);
 	glEnd();
-    textInfo[i].bot=game->box[i].center.y;
+    textInfo[i].bot=game->box[i].center.y - 10;
     textInfo[i].left=game->box[i].center.x;
 
 	glPopMatrix();
@@ -404,7 +404,7 @@ void render(Game *game)
     unsigned int cref=0x00FFFF00;
     for (int m=0;m<5;m++)
     {
-    ggprint8b(&textInfo[m],16,cref,text[m]);
+    ggprint12(&textInfo[m],16,cref,text[m]);
     }
 }
 
