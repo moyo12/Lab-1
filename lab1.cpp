@@ -51,7 +51,8 @@ GLXContext glc;
 
 //Structures
 
-
+//This will control the handler when the user clicks the "b" button
+bool flag = false;
 struct Vec {
     float x, y, z;
 };
@@ -77,7 +78,7 @@ struct Game {
 	n=0;
 	//do the circle here.
 	circle.radius=150.0;
-	circle.center.x=500;
+	circle.center.x=600;
 	circle.center.y=0;	
 	//declare a box shape
 	for(int i=0;i<5;i++)
@@ -254,8 +255,13 @@ int check_keys(XEvent *e, Game *game)
 	    return 1;
 	}
 	//You may check other keys here.
-
+    if (key == XK_b){
+        flag = !flag;
+        }
+       std:: cout<<"B pressed\n";
     }
+
+
     return 0;
 }
 
@@ -285,6 +291,10 @@ void movement(Game *game)
 		//collision with box
 		p->s.center.y = game->box[j].center.y + game->box[j].height + .1;
 		p -> velocity.y *= -.5;
+        if(p->velocity.x<0)
+            p -> velocity.x *= -.4;
+        p->velocity.x *=1.04;
+
 		//p->s.cneter.y > 
 	    }
 	}
@@ -293,7 +303,7 @@ void movement(Game *game)
 	d1=p->s.center.y-game->circle.center.y;
 	dist=sqrt(d0*d0+d1*d1);
 	if(dist<game->circle.radius){
-	    p->velocity.x += d0 * .01;
+	    p->velocity.x += d0 * .001;
 	    p->velocity.y =+ d1*.001;
 	}
 
@@ -312,7 +322,8 @@ void movement(Game *game)
 void render(Game *game)
 {
     float w, h;
-    Rect r;
+    Rect textInfo[5];
+    static const char* const text[]={"Requirements","Design","Coding","Testing","Maintenance"};
     const int n=40;
     static int firstTime=1;
     static Vec vert[n];
@@ -355,6 +366,8 @@ void render(Game *game)
 	glVertex2i( w, h);
 	glVertex2i( w,-h);
 	glEnd();
+    textInfo[i].bot=game->box[i].center.y;
+    textInfo[i].left=game->box[i].center.x;
 
 	glPopMatrix();
     }
@@ -376,12 +389,23 @@ void render(Game *game)
     glPopMatrix();
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D,0);
+    /*for (int i=0;i<5;i++){
+    textInfo[i].bot=game->box[i].center.y;
+    textInfo[i].left=game->box[i].center.x;
+    }*/
 
-    r.bot=490;
-    r.left=50;
-    r.center=0;
-    unsigned int cref=0x00ffffff;
-    ggprint8b(&r,16,cref,"Requirements");
+    if(flag)
+    {
+		for (int i =0;i<100;i++)
+        {
+            makeParticle(game, 97, 580);
+        }
+    }
+    unsigned int cref=0x00FFFF00;
+    for (int m=0;m<5;m++)
+    {
+    ggprint8b(&textInfo[m],16,cref,text[m]);
+    }
 }
 
 
